@@ -607,11 +607,15 @@ IOStatus MockFileSystem::GetAbsolutePath(const std::string& db_path,
                                          std::string* output_path,
                                          IODebugContext* /*dbg*/) {
   *output_path = NormalizeMockPath(db_path);
+#ifdef OS_WIN
+  return IOStatus::OK(); // TODO
+#else
   if (output_path->at(0) != '/') {
     return IOStatus::NotSupported("GetAbsolutePath");
   } else {
     return IOStatus::OK();
   }
+#endif
 }
 
 std::string MockFileSystem::NormalizeMockPath(const std::string& path) {
